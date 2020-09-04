@@ -119,7 +119,7 @@ namespace criarFormsus
 
             Console.WriteLine("Indo para página principal");
             driver.Navigate().GoToUrl("http://formsus.datasus.gov.br/admin/aplicacao.php");
-            Thread.Sleep(2002);
+            Thread.Sleep(2003);
 
             IWebElement pesquisaElement = driver.FindElement(By.Name("filtro_nome_aplicacao"));
             pesquisaElement.Clear();
