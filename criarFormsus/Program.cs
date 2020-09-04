@@ -156,6 +156,8 @@ namespace criarFormsus
         {
             string iDNu;
             string strNomeTipo;
+            string strFavNaoFavNovo;
+
             if (strTipo == "Tecnico") {
                 iDNu = novaCP.iDNuTecnico;
                 strNomeTipo = "Técnico";
@@ -188,8 +190,22 @@ namespace criarFormsus
             IWebElement iframeMsg = driver.FindElement(By.Id("mce_editor_2"));
             driver.SwitchTo().Frame(iframeMsg);
 
+            if (novaCP.strNomeTecnologia.IndexOf("ampliação de uso") > 0)
+            {
+                strFavNaoFavNovo = novaCP.strFavNaoFav + " à ampliação de uso";
+            }
+            else if (novaCP.strNomeTecnologia.IndexOf("incorporação") > 0)
+            {
+                strFavNaoFavNovo = novaCP.strFavNaoFav + " à incorporação";
+            }
+            else if(novaCP.strNomeTecnologia.IndexOf("exclusão") > 0)
+            {
+                strFavNaoFavNovo = novaCP.strFavNaoFav + " à exclusão";
+            }
+
+
             strTemp = driver.FindElement(By.TagName("body")).GetAttribute("innerHTML");
-            strTemp = strTemp.Replace("XX/2020", novaCP.strNuCP).Replace("#nomeTecnologia#", novaCP.strNomeTecnologia).Replace("#favNaofav#", novaCP.strFavNaoFav);
+            strTemp = strTemp.Replace("XX/2020", novaCP.strNuCP).Replace("#nomeTecnologia#", novaCP.strNomeTecnologia).Replace("#favNaofav#", strFavNaoFavNovo);
 
             pesquisaElement = driver.FindElement(By.TagName("body"));
             pesquisaElement.Clear();
@@ -207,7 +223,7 @@ namespace criarFormsus
             driver.SwitchTo().Frame(iframeMsg);
 
             strTemp = driver.FindElement(By.TagName("body")).GetAttribute("innerHTML");
-            strTemp = strTemp.Replace("XX/2020", novaCP.strNuCP).Replace("#nomeTecnologia#", novaCP.strNomeTecnologia).Replace("#favNaofav#", novaCP.strFavNaoFav);
+            strTemp = strTemp.Replace("XX/2020", novaCP.strNuCP).Replace("#nomeTecnologia#", novaCP.strNomeTecnologia).Replace("#favNaofav#", strFavNaoFavNovo);
 
             pesquisaElement = driver.FindElement(By.TagName("body"));
             pesquisaElement.Clear();
