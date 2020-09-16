@@ -119,9 +119,21 @@ namespace criarFormsus
 
             Console.WriteLine("Indo para página principal");
             driver.Navigate().GoToUrl("http://formsus.datasus.gov.br/admin/aplicacao.php");
-            Thread.Sleep(2003);
 
-            IWebElement pesquisaElement = driver.FindElement(By.Name("filtro_nome_aplicacao"));
+            IWebElement pesquisaElement;
+            while (true)
+            {
+                try
+                {
+                    pesquisaElement = driver.FindElement(By.Name("filtro_nome_aplicacao"));
+                    break;
+                }
+                catch (Exception)
+                {
+                    Thread.Sleep(1000);
+                }
+            }
+
             pesquisaElement.Clear();
             pesquisaElement.SendKeys("Técnico - Base - NÃO apagar (Cópia");
 
@@ -194,13 +206,14 @@ namespace criarFormsus
             {
                 strFavNaoFavNovo = novaCP.strFavNaoFav + " à ampliação de uso";
             }
-            else if (novaCP.strNomeTecnologia.IndexOf("incorporação") > 0)
-            {
-                strFavNaoFavNovo = novaCP.strFavNaoFav + " à incorporação";
-            }
+           
             else if(novaCP.strNomeTecnologia.IndexOf("exclusão") > 0)
             {
                 strFavNaoFavNovo = novaCP.strFavNaoFav + " à exclusão";
+            }
+            else //if (novaCP.strNomeTecnologia.IndexOf("incorporação") > 0)
+            {
+                strFavNaoFavNovo = novaCP.strFavNaoFav + " à incorporação";
             }
 
 
