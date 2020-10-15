@@ -11,6 +11,13 @@ namespace criarFormsus
     {
         static void Main(string[] args)
         {
+
+            // Create new stopwatch
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+
+            // Begin timing
+            stopwatch.Start();
+
             var bookList = new List<ObjCP>();
             string line;
 
@@ -37,30 +44,29 @@ namespace criarFormsus
                 
             }
 
-            #region Logar
+            //abrir o firefox
             IWebDriver driver = new FirefoxDriver();
-            driver.Navigate().GoToUrl("http://formsus.datasus.gov.br/site/default.php");
 
-            IWebElement userElement = driver.FindElement(By.Name("login_usuario"));
-            userElement.SendKeys("conitec");
+            //Fazer o login
+            logar(driver);
 
-            IWebElement passElement = driver.FindElement(By.Name("senha_usuario"));
-            passElement.SendKeys("conitec7646");
-
-            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-            js.ExecuteScript("document.form.submit()");
-            //Thread.Sleep(2000);
-            #endregion 
-
-
+            int count = 0;
             foreach (var item in bookList)
             {
+                count++;
                 FormulariosCP formulariosCP = CriarFormularios(driver);
 
                 Console.WriteLine("Nu Formulário Técnico: {0}", formulariosCP.StrNuTecnico);
                 Console.WriteLine("Nu Formulário Opinião: {0}", formulariosCP.StrNuOpiniao);
                 item.iDNuTecnico = formulariosCP.StrNuTecnico;
-                item.iDNuOpiniao = formulariosCP.StrNuOpiniao;                
+                item.iDNuOpiniao = formulariosCP.StrNuOpiniao;
+
+                if (count % 2 == 0)
+                {
+                    Console.WriteLine("Relogando: {0}", count.ToString());
+                    logar(driver);
+                }
+
             }
 
             foreach (var item in bookList)
@@ -102,9 +108,35 @@ namespace criarFormsus
                 CriarCP(item, driver, "Tecnico");
                 CriarCP(item, driver, "Opiniao");
             }
+
+            //Fechar o firefox
             driver.Quit();
-            Console.WriteLine("Programa finalizdo com sucesso!!!!");
+
+            // Stop timing
+            stopwatch.Stop();
+
+            //Console.WriteLine("Time taken : {0}", stopwatch.Elapsed);
+
+            Console.WriteLine("Programa finalizdo com sucesso!!!! Tempo: {0}", stopwatch.Elapsed);
             Console.Read();
+        }
+
+        private static void logar(IWebDriver driver)
+        {
+            #region Logar
+
+            driver.Navigate().GoToUrl("http://formsus.datasus.gov.br/site/default.php?login_usuario=LOGOFF");
+
+            IWebElement userElement = driver.FindElement(By.Name("login_usuario"));
+            userElement.SendKeys("conitec");
+
+            IWebElement passElement = driver.FindElement(By.Name("senha_usuario"));
+            passElement.SendKeys("conitec7646");
+
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            js.ExecuteScript("document.form.submit()");
+            //Thread.Sleep(2000);
+            #endregion
         }
 
         private static FormulariosCP CriarFormularios(IWebDriver driver)
@@ -130,7 +162,7 @@ namespace criarFormsus
                 }
                 catch (Exception)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(5000);
                 }
             }
 
