@@ -128,10 +128,10 @@ namespace criarFormsus
             driver.Navigate().GoToUrl("http://formsus.datasus.gov.br/site/default.php?login_usuario=LOGOFF");
 
             IWebElement userElement = driver.FindElement(By.Name("login_usuario"));
-            userElement.SendKeys("conitec");
+            userElement.SendKeys("XXXXXXX");
 
             IWebElement passElement = driver.FindElement(By.Name("senha_usuario"));
-            passElement.SendKeys("conitec7646");
+            passElement.SendKeys("XXXXXXX");
 
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             js.ExecuteScript("document.form.submit()");
